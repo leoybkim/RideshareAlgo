@@ -6,7 +6,7 @@ import java.lang.*;
 // Track time it takes for average trip
 // Track time it takes for average pickup
 // Track time it takes for both added together
-// Track number of passengers per driver 
+// Track number of passengers per driver
 
 class Solution {
   private static double lambda = 0.2;
@@ -15,7 +15,7 @@ class Solution {
   private static int numDrivers = 10;
   private static int numPassengers = 10;
   private static Grid grid;
-  
+
   public enum DriverState {
     IDLE, DRIVING_TO_PASSENGER, DRIVING_TO_DESTINATION
   }
@@ -27,15 +27,15 @@ class Solution {
     grid = new Grid(dim, numDrivers, numPassengers, DriverType.HEATSEEKING);
     runQueueAlgorithm();
   }
-  
+
   public static void runTabuAlgorithm(){
-    
+
   }
-  
+
   public static void runSwarmAlgorithm(){
-    
+
   }
-  
+
   public static void runQueueAlgorithm(){
 
     Deque<Passenger> queue = new LinkedList<Passenger>();
@@ -43,7 +43,7 @@ class Solution {
       queue.addFirst(grid.passengers[i]);
     }
 
-    int nextPassengerSpawn = 5; 
+    int nextPassengerSpawn = 5;
     int totalNumTrips = 0;
     int totalDistanceNoPassenger = 0;
     int totalDistanceWithPassenger = 0;
@@ -52,39 +52,39 @@ class Solution {
     //Main tick loop
     for (int i = 0; i < 20; i++) {
       Grid.printGrid(grid);
-      
+
       if (nextPassengerSpawn == i) {
         nextPassengerSpawn = (int)calcNextPassengerSpawn() + i;
         Coordinate loc = new Coordinate(rng.nextInt(dim),rng.nextInt(dim));
         Coordinate dest = new Coordinate(rng.nextInt(dim),rng.nextInt(dim));
         queue.addFirst(new Passenger(loc, dest));
       }
-      
+
       // First loop - update driver state for all drivers.
       for (int j = 0; j < numDrivers; j++) {
         Driver currDriver = grid.drivers[j];
-        
+
         if (currDriver.driverState == DriverState.IDLE) {
           // Driver remains idle. Follow driver behaviour.
-          // If the driver is stationary, do nothing. 
+          // If the driver is stationary, do nothing.
           if (currDriver.driverType == DriverType.STATIONARY) {
             continue;
           }
           else if(currDriver.driverType == DriverType.RANDOM){
             Random rand = new Random();
-            //rand.nextInt(max + 1 - min) + min; 
-            int deltaX = rand.nextInt(3) - 1, deltaY = rand.nextInt(3) - 1; 
-            while(deltaX == 0 || currDriver.location.x + deltaX  >= grid.dim 
+            //rand.nextInt(max + 1 - min) + min;
+            int deltaX = rand.nextInt(3) - 1, deltaY = rand.nextInt(3) - 1;
+            while(deltaX == 0 || currDriver.location.x + deltaX  >= grid.dim
                   || currDriver.location.x + deltaX  < 0){
               deltaX = rand.nextInt(3) - 1;
             }
-            while(deltaY == 0 || currDriver.location.y + deltaY  >= grid.dim 
+            while(deltaY == 0 || currDriver.location.y + deltaY  >= grid.dim
                   || currDriver.location.y + deltaY  < 0){
               deltaY = rand.nextInt(3) - 1;
             }
             currDriver.location.x += deltaX;
             currDriver.location.y += deltaY;
-            
+
           }
           else if(currDriver.driverType == DriverType.HEATSEEKING){
             //hotspot is in the middle of the grid
@@ -98,28 +98,28 @@ class Solution {
             }
           }
         }
-        
+
         else if (currDriver.driverState == DriverState.DRIVING_TO_PASSENGER) {
           //still moving to passenger
           if (currDriver.numTicksUntilDestination > 0) {
             currDriver.distanceTravelled++;
             currDriver.numTicksUntilDestination--;
           }
-          
+
           //found passenger
           else {
             currDriver.driverState = DriverState.DRIVING_TO_DESTINATION;
             currDriver.numTicksUntilDestination = currDriver.passenger.distance;
           }
         }
-        
+
         else if (currDriver.driverState == DriverState.DRIVING_TO_DESTINATION) {
           currDriver.distanceTravelled++;
           currDriver.distanceWithPassenger++;
 
           if (currDriver.numTicksUntilDestination > 0) {
             currDriver.numTicksUntilDestination--;
-          } 
+          }
           //reached destination
           else {
             currDriver.location = currDriver.passenger.destination;
@@ -127,22 +127,22 @@ class Solution {
             currDriver.passenger = null;
             currDriver.driverState = DriverState.IDLE;
           }
-        } 
+        }
       }
-      
+
       // Second loop - assign best driver for each passenger in the queue
       while (queue.size() > 0) {
         Passenger currPassenger = queue.peekLast();
         int minDistance = 99999999;
         int distance = 0;
         Driver bestDriver = null;
-        
+
         // Queue is empty, exit while loop.
         if (currPassenger == null) break;
-        
+
         for (int j = 0; j < numDrivers; j++) {
           Driver currDriver = grid.drivers[j];
-    
+
           // If driver is not idle, it cannot take a passenger
           if (currDriver.driverState != DriverState.IDLE) {
             continue;
@@ -157,10 +157,10 @@ class Solution {
             }
           }
         }
-        
+
         // All the drivers are taken
         if (bestDriver == null) break;
-        
+
         bestDriver.numTicksUntilDestination = minDistance;
         bestDriver.passenger = currPassenger;
         bestDriver.driverState = DriverState.DRIVING_TO_PASSENGER;
@@ -229,10 +229,10 @@ class Grid {
     for (Driver d : grid.drivers) {
       System.out.print(d.numTicksUntilDestination + " ");
     }
-    
+
     //System.out.println();
     //System.out.println("Distance travelled: ");
-    
+
     for (Driver d : grid.drivers) {
       //System.out.print(d.distanceTravelled + " ");
     }
@@ -268,14 +268,14 @@ class Driver {
   int distanceTravelled;
   int distanceWithPassenger; //not needed
 
-  public Driver(Coordinate loc, Solution.DriverType type) 
+  public Driver(Coordinate loc, Solution.DriverType type)
   {
     // driver's location on grid
     this.location = loc;
     this.driverState = Solution.DriverState.IDLE;
     this.driverType = type;
   }
-  
+
   void pickUp(Passenger p) {
     this.destination = p.destination;
     return;
