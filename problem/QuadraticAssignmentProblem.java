@@ -1,26 +1,28 @@
 package problem;
 
+import aco.ant.Ant;
 import aco.ACO;
 import java.util.*;
 
 public class QuadraticAssignmentProblem extends Problem{
 
 	public static final int Q = 1;
+	public ACO aco;
 
 	protected int[][] mapping;
 
 	protected int numberOfPassengers;
 	protected int numberOfDrivers;
-	
+
 	public QuadraticAssignmentProblem(String filename) {
 		super(filename);
-		
+
 		reader.open();
-		
+
 		this.numberOfPassengers = reader.readInt();
 		this.numberOfDrivers = reader.readInt();
 		this.mapping = reader.readIntMatrix(numberOfPassengers, numberOfDrivers, ",");
-		
+
 		reader.close();
 	}
 
