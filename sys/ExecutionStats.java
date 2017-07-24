@@ -42,7 +42,7 @@ public class ExecutionStats {
 		double startTime = (new Date()).getTime();
 		ets.p = p;
 		ets.aco = aco;
-		p.solve();
+		p.solve(aco);
 		ets.executionTime = (new Date()).getTime() - startTime;
 		return ets;
 	}

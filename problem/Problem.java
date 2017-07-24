@@ -2,6 +2,8 @@ package problem;
 
 import sys.InstanceReader;
 import aco.ant.Ant;
+import aco.ACO;
+
 
 public abstract class Problem {
 
@@ -32,7 +34,7 @@ public abstract class Problem {
 	 */
 	public abstract double getT0();
 
-	public abstract void solve();
+	public abstract void solve(ACO aco);
 
 	public abstract String getBestSolution();
 }

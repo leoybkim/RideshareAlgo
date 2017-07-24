@@ -38,7 +38,7 @@ public class QuadraticAssignmentProblem extends Problem{
 	}
 
 	@Override
-	public void solve() {
+	public void solve(ACO aco) {
         List<Integer> pairings = new ArrayList<Integer>();
 		for (int i = 0; i < numberOfPassengers; i++) {
 			// TODO pass in the single row array with the passenger's distance to each driver
