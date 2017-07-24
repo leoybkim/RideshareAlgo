@@ -25,7 +25,49 @@ class Solution {
 
   public static void main(String[] args) {
     grid = new Grid(dim, numDrivers, numPassengers, DriverType.HEATSEEKING);
+    generate_ACO_infile(numDrivers, numPassengers, grid);
     runQueueAlgorithm();
+  }
+
+  public static void generate_ACO_infile(int numberOfDrivers, int numberOfPassengers, Grid grid)
+  {
+    // The name of the file to open.
+    String fileName = "test_"+numberOfDrivers+"_"+numberOfPassengers+".qap";
+    try {
+        // Assume default encoding.
+        FileWriter fileWriter =
+            new FileWriter(new File("in"+File.separator,fileName));
+
+        // Always wrap FileWriter in BufferedWriter.
+        BufferedWriter bufferedWriter =
+            new BufferedWriter(fileWriter);
+
+        // Note that write() does not automatically
+        // append a newline character.
+        bufferedWriter.write(Integer.toString(numberOfPassengers));
+        bufferedWriter.newLine();
+        bufferedWriter.write(Integer.toString(numberOfDrivers));
+        bufferedWriter.newLine();
+
+        for (int i=0; i< numberOfPassengers; i++) {
+            for (int j=0; j<numberOfDrivers; j++) {
+                bufferedWriter.write(Integer.toString(
+                Math.abs(grid.passengers[i].location.x - grid.drivers[j].location.x)
+                 + Math.abs(grid.passengers[i].location.y - grid.drivers[j].location.y)));
+                bufferedWriter.write(" ");
+            }
+            bufferedWriter.newLine();
+        }
+        // Always close files.
+        bufferedWriter.close();
+    }
+    catch(IOException ex) {
+        System.out.println(
+            "Error writing to file '"
+            + fileName + "'");
+        // Or we could just do this:
+        // ex.printStackTrace();
+    }
   }
 
   public static void runTabuAlgorithm(){
@@ -211,7 +253,7 @@ class Grid {
     }
 
     for (Passenger p : grid.passengers) {
-      //matrix[p.location.x][p.location.y] = "P";
+      matrix[p.location.x][p.location.y] = "P";
     }
 
     for (Driver d : grid.drivers) {
