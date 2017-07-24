@@ -29,12 +29,12 @@ import aco.AntSystem;
  */
 public class QAPTest {
 
-	private static int ants = 500;
+	private static int ants = 10;
 
-	private static int interations = 100;
+	private static int interations = 10;
 
 	public static void main(String[] args) {
-		Problem p = new QuadraticAssignmentProblem("in/test3.qap");
+		Problem p = new QuadraticAssignmentProblem("in/test1.qap");
 		ACO aco = new AntSystem(p, ants, interations);
 
 		ExecutionStats es = ExecutionStats.execute(aco, p);

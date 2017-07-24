@@ -67,7 +67,7 @@ public abstract class Ant extends Observable implements Runnable {
 		this.tourLength = 0;
 		this.nodesToVisit = new ArrayList<Integer>();
 		this.tour = new ArrayList<Integer>();
-		this.path = new int[aco.p.getNodes()][aco.p.getNodes()];
+		this.path = new int[aco.p.getNodesDriver()];
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public abstract class Ant extends Observable implements Runnable {
 	
 	public void init(){
 		reset();
-		this.currentNode = PseudoRandom.randInt(0, aco.p.getNodes() - 1);
+		this.currentNode = PseudoRandom.randInt(0, aco.p.getNodesDriver() - 1);
 		this.tour.add(new Integer(currentNode));
 		this.aco.p.initializeTheMandatoryNeighborhood(this);
 	}

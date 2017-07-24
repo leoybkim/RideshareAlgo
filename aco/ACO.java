@@ -91,10 +91,10 @@ public abstract class ACO implements Observer{
 	}
 
 	private void initializePheromones() {
-		this.tau = new double[p.getNodes()][p.getNodes()];
+		this.tau = new double[p.getNodesPassenger()][p.getNodesDriver()];
 
-		for (int i = 0; i < p.getNodes(); i++) {
-			for (int j = 0; j < p.getNodes(); j++) {
+		for (int i = 0; i < p.getNodesPassenger(); i++) {
+			for (int j = 0; j < p.getNodesDriver(); j++) {
 				this.tau[i][j] = p.getT0();
 			}
 		}

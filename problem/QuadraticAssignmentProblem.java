@@ -17,43 +17,62 @@ public class QuadraticAssignmentProblem extends Problem{
 	
 	//Defined by Dorigo	
 	protected int[] potencialF;
+
+	protected int[] totalDistancePerPassenger;
+
+	protected int[][] mapping;
+
+	protected int numberOfPassengers;
+	protected int numberOfDrivers;
 	
 	public QuadraticAssignmentProblem(String filename) {
 		super(filename);
 		
 		reader.open();
 		
-		this.size = reader.readInt();
-		this.F = reader.readIntMatrix(size, size,",");
-		this.D = reader.readIntMatrix(size, size,",");
+		this.numberOfPassengers = reader.readInt();
+		this.numberOfDrivers = reader.readInt();
+		this.mapping = reader.readIntMatrix(numberOfPassengers, numberOfDrivers, ",");
+
+//		this.F = reader.readIntMatrix(size, size,",");
+//		this.D = reader.readIntMatrix(size, size,",");
 		
 		reader.close();
 		
 		//Calculate the potencial D e potencial F
-		this.potencialD = new int[size];
-		this.potencialF = new int[size];
+//		this.potencialD = new int[size];
+//		this.potencialF = new int[size];
 		
-		for (int i = 0; i < size; i++) {
-			int pD = 0;
-			int pF = 0;
-			for (int j = 0; j < size; j++) {
-				pD += D[i][j];
-				pF += F[i][j];
+		for (int i = 0; i < numberOfPassengers; i++) {
+//			int pD = 0;
+//			int pF = 0;
+			int p = 0;
+			for (int j = 0; j < numberOfDrivers; j++) {
+//				pD += D[i][j];
+//				pF += F[i][j];
+				p += mapping[i][j];
 			}
-			potencialD[i] = pD;
-			potencialF[i] = pF;			
+//			potencialD[i] = pD;
+//			potencialF[i] = pF;
+			totalDistancePerPassenger[i] = p;
 		}
 	}
 
 	@Override
 	public double getNij(int i, int j) {
-		return 1.0 / potencialD[j];
+		return (double) mapping[i][j];
 	}
 
 	@Override
 	public int getNodes() {
 		return size;
 	}
+
+	@Override
+    public int getNodesPassenger() { return numberOfPassengers;}
+
+    @Override
+    public int getNodesDriver() { return numberOfDrivers;}
 
 	@Override
 	public double getT0() {

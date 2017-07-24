@@ -55,6 +55,10 @@ public abstract class Problem {
 	 * @return number of nodes
 	 */
 	public abstract int getNodes();
+
+	public abstract int getNodesPassenger();
+
+	public abstract int getNodesDriver();
 	
 	/**
 	 * Return the initial pheromone
