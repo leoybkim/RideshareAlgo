@@ -1,12 +1,12 @@
 /*
  * Copyright 2014 Thiago Nascimento
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,11 +34,6 @@ public class AntSystem extends ACO {
 	}
 
 	@Override
-	public void daemonActions() {
-
-	}
-
-	@Override
 	public void initializeAnts() {
 		this.ant = new Ant[numberOfAnts];
 
@@ -50,24 +45,19 @@ public class AntSystem extends ACO {
 
 	@Override
 	public void globalUpdateRule() {
-		for (int i = 0; i < p.getNodes(); i++) {
-			for (int j = i; j < p.getNodes(); j++) {
-				if (i != j) {
-					double deltaTau = 0.0;
+		for (int i = 0; i < p.getNodesDriver(); i++) {
+			double deltaTau = 0.0;
 
-					for (int k = 0; k < numberOfAnts; k++) {
-						if (ant[k].path[i][j] == 1) {
-							deltaTau += p.getDeltaTau(ant[k], i, j);
-						}
-					}
-
-					double evaporation = (1.0 - RHO) * tau[i][j];
-					double deposition = deltaTau;				
-					
-					tau[i][j] = evaporation + deposition;
-					tau[j][i] = evaporation + deposition;
+			for (int k = 0; k < numberOfAnts; k++) {
+				if (ant[k].path[i] == 1) {
+					deltaTau += getDeltaTau(i);
 				}
 			}
+
+			double evaporation = (1.0 - RHO) * tau[i];
+			double deposition = deltaTau;
+
+			tau[i] = evaporation + deposition;
 		}
 	}
 }

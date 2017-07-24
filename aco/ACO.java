@@ -1,12 +1,12 @@
 /*
  * Copyright 2014 Thiago Nascimento
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,9 @@ package aco;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.TreeSet;
+import java.util.Set;
+import java.util.Comparator;
 
 import problem.Problem;
 import sys.Settings;
@@ -33,7 +36,11 @@ import aco.ant.Ant;
 public abstract class ACO implements Observer{
 
 	/** Parameter for evaporation */
-	public static final double RHO = Settings.RHO; 
+	public static final double RHO = Settings.RHO;
+
+	public static final int Q = 1;
+
+	protected int[] driverDistances;
 	
 	/** Ants **/
 	protected Ant[] ant;
@@ -42,7 +49,7 @@ public abstract class ACO implements Observer{
 	protected int numberOfAnts;
 
 	/** Pheromone Matrix **/
-	protected double[][] tau;
+	protected double[] tau;
 	
 	/** Applied Problem */
 	public Problem p;
@@ -57,7 +64,7 @@ public abstract class ACO implements Observer{
 	protected int finishedAnts = 0;
 	
 	/** Best Ant in tour */
-	protected Ant bestAnt;
+	protected Set<Ant> bestAnt;
 	
 	public ACO(Problem problem, int numberOfAnts, int interations) {
 		if (problem == null) {
@@ -73,16 +80,31 @@ public abstract class ACO implements Observer{
 		this.p = problem;
 		this.numberOfAnts = numberOfAnts;		
 		this.interations = interations;
+		this.bestAnt = new TreeSet<Ant>(new Comparator<Ant>() {
+			@Override
+			public int compare(Ant o1, Ant o2) {
+				// Define comparing logic here
+				if(o1.tourLength<o2.tourLength)
+					return -1;
+				else if(o2.tourLength<o1.tourLength)
+					return 1;
+				return 0;
+			}
+		});
 	}
 
-	public Ant solve() {
+	public Set<Ant> solve(int[] passengerDrivers) {
+		this.driverDistances = passengerDrivers;
 		initializeData();
 		while (!terminationCondition()) {
 			constructAntsSolutions();
 			updatePheromones();
-			daemonActions(); // optional
 		}
 		return bestAnt;
+	}
+
+	public double getDeltaTau(int i) {
+		return Q / driverDistances[i];
 	}
 
 	private void initializeData() {
@@ -91,12 +113,10 @@ public abstract class ACO implements Observer{
 	}
 
 	private void initializePheromones() {
-		this.tau = new double[p.getNodesPassenger()][p.getNodesDriver()];
+		this.tau = new double[p.getNodesDriver()];
 
-		for (int i = 0; i < p.getNodesPassenger(); i++) {
-			for (int j = 0; j < p.getNodesDriver(); j++) {
-				this.tau[i][j] = p.getT0();
-			}
+		for (int j = 0; j < p.getNodesDriver(); j++) {
+			this.tau[j] = p.getT0();
 		}
 	}
 	
@@ -131,11 +151,13 @@ public abstract class ACO implements Observer{
 	public synchronized void update(Observable observable, Object obj) {
 		Ant ant = (Ant) obj;
 
-		ant.tourLength = p.evaluate(ant);
+		ant.tourLength = evaluate(ant.currentNode);
 
-		if (p.better(ant, bestAnt)) {
-			bestAnt = ant.clone();
-		}
+//		if (better(ant, bestAnt)) {
+//			bestAnt = ant.clone();
+//		}
+
+		bestAnt.add(ant);
 
 		if (++finishedAnts == numberOfAnts) {
 			// Continue all execution
@@ -144,19 +166,29 @@ public abstract class ACO implements Observer{
 		}
 	}
 
-	public double[][] getTau() {
+//	public boolean better(Ant ant, Ant bestAnt) {
+//		return bestAnt == null || ant.tourLength < bestAnt.tourLength;
+//	}
+
+	public int evaluate(int currentNode) {
+		return driverDistances[currentNode];
+	}
+
+	public double[] getTau() {
 		return tau;
 	}
 	
-	public synchronized void setTau(int j, int i, double value) {
-		tau[i][j] = value;		
+	public synchronized void setTau(int i, double value) {
+		tau[i] = value;
 	}
 	
-	public double getTau(int i,int j){
-		return tau[i][j];
+	public double getTau(int i){
+		return tau[i];
 	}
 	
-	public abstract void daemonActions();
+	public int getDriverDistances(int i) {
+		return driverDistances[i];
+	}
 	
 	public abstract void globalUpdateRule();
 	

@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Observable;
 
 import sys.Settings;
-import util.PseudoRandom;
 import aco.ACO;
 
 /**
@@ -51,7 +50,7 @@ public abstract class Ant extends Observable implements Runnable {
 	/** The Current Node */
 	public int currentNode;
 	
-	public int[][] path;
+	public int[] path;
 	
 	public List<Integer> nodesToVisit;
 
@@ -80,14 +79,11 @@ public abstract class Ant extends Observable implements Runnable {
 	
 	public void init(){
 		reset();
-		this.currentNode = PseudoRandom.randInt(0, aco.p.getNodesDriver() - 1);
-		this.tour.add(new Integer(currentNode));
-		this.aco.p.initializeTheMandatoryNeighborhood(this);
 	}
 	
 	@Override
 	public String toString() {
-		return "Ant " + id + " " + tour+" "+tourLength;
+		return "Ant id: " + id + " solution is driver # " + tour+" with a distance of "+tourLength;
 	}
 
 	/**
@@ -98,5 +94,5 @@ public abstract class Ant extends Observable implements Runnable {
 	/**
 	 * Clone the ant
 	 */
-	public abstract Ant clone();
+//	public abstract Ant clone();
 }

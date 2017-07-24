@@ -37,29 +37,19 @@ public class ExecutionStats {
 	
 	public ACO aco;
 	
-	public Ant bestAnt;
-	
 	public static ExecutionStats execute(ACO aco, Problem p) {
 		ExecutionStats ets = new ExecutionStats();
 		double startTime = (new Date()).getTime();
 		ets.p = p;
 		ets.aco = aco;
-		ets.bestAnt = aco.solve();
+		p.solve();
 		ets.executionTime = (new Date()).getTime() - startTime;
 		return ets;
 	}
 	
 	public void printStats(){
-		System.out.println("ACO Framework Version 1.0");
-		System.out.println("Algorithm: "+bestAnt.aco.getClass().getSimpleName());
-		System.out.println("Problem: "+bestAnt.aco.p.getClass().getSimpleName());
-		System.out.println("Instance Name: "+bestAnt.aco.p.getFilename());
+		System.out.println("ACO Finished Algorithm");
 		System.out.println("Execution time (ms): "+executionTime);
-		System.out.println("Best Solution Found: " + bestAnt.tour);
-		System.out.println("Tour Length: "+ bestAnt.tourLength);	
-	}	
-	
-	public void printDotFormat() {
-		System.out.println(Convert.toDot(bestAnt.aco.getTau()));
+		System.out.println("Best Solution Found: " + p.getBestSolution);
 	}
 }

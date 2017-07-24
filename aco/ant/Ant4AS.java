@@ -16,8 +16,6 @@
 
 package aco.ant;
 
-import java.util.ArrayList;
-
 import util.RouletteWheel;
 import aco.ACO;
 
@@ -36,38 +34,32 @@ public class Ant4AS extends Ant {
 
 	@Override
 	public void explore() {
-		while (!nodesToVisit.isEmpty()) {
-			int nextNode = doExploration(currentNode);
+        int nextNode = doExploration();
 
-			//Save next node
-			tour.add(new Integer(nextNode));
-			path[currentNode][nextNode] = 1;
-			path[nextNode][currentNode] = 1;
-			
-			aco.p.updateTheMandatoryNeighborhood(this);
-			
-			currentNode = nextNode;
-		}
+        //Save next node
+        tour.add(new Integer(nextNode));
+        path[nextNode] = 1;
+
+        currentNode = nextNode;
 	}
 
 	/**
 	 * Return the next node
-	 * 
-	 * @param i The current node
+	 *
 	 * @return The next node
 	 */
-	protected int doExploration(int i) {
+	protected int doExploration() {
 		int nextNode = -1;
 		double sum = 0.0;
 		
 		// Update the sum
-		for (Integer j : nodesToVisit) {
-			if (aco.getTau(i, j) == 0.0) {
+		for (int i = 0; i < aco.p.getNodesDriver(); i++) {
+			if (aco.getTau(i) == 0.0) {
 				throw new RuntimeException("tau == 0.0");
 			}
 
-			double tij = Math.pow(aco.getTau(i, j), ALPHA);
-			double nij = Math.pow(aco.p.getNij(i, j), BETA);
+			double tij = Math.pow(aco.getTau(i), ALPHA);
+			double nij = Math.pow(aco.getDriverDistances(i), BETA);
 			sum += tij * nij;
 		}
 		
@@ -75,12 +67,12 @@ public class Ant4AS extends Ant {
 			throw new RuntimeException("sum == 0.0");
 		}
 
-		double[] probability = new double[aco.p.getNodes()];
+		double[] probability = new double[aco.p.getNodesDriver()];
 		double sumProbability = 0.0;
 		
-		for (Integer j : nodesToVisit) {
-			double tij = Math.pow(aco.getTau(i, j), ALPHA);
-			double nij = Math.pow(aco.p.getNij(i, j), BETA);
+		for (int j = 0; j < aco.p.getNodesDriver(); j++) {
+			double tij = Math.pow(aco.getTau(j), ALPHA);
+			double nij = Math.pow(aco.getDriverDistances(j), BETA);
 			probability[j] = (tij * nij) / sum;
 			sumProbability += probability[j];
 		}
@@ -91,20 +83,18 @@ public class Ant4AS extends Ant {
 		if (nextNode == -1) {
 			throw new RuntimeException("nextNode == -1");
 		}
-
-		nodesToVisit.remove(new Integer(nextNode));
 		
 		return nextNode;
 	}
-
-	@Override
-	public Ant clone() {
-		Ant ant = new Ant4AS(aco);
-		ant.id = id;
-		ant.currentNode = currentNode;
-		ant.tourLength = tourLength;
-		ant.tour = new ArrayList<Integer>(tour);
-		ant.path = path.clone();
-		return ant;
-	}
+//
+//	@Override
+//	public Ant clone() {
+//		Ant ant = new Ant4AS(aco);
+//		ant.id = id;
+//		ant.currentNode = currentNode;
+//		ant.tourLength = tourLength;
+//		ant.tour = new ArrayList<Integer>(tour);
+//		ant.path = path.clone();
+//		return ant;
+//	}
 }
