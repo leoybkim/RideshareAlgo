@@ -12,7 +12,7 @@ class Solution {
   private static double lambda = 0.2;
   private static Random rng = new Random();
   private static int dim = 10;
-  private static int numDrivers = 8;
+  private static int numDrivers = 10;
   private static int numPassengers = 10;
   private static Grid grid;
 
@@ -32,8 +32,9 @@ class Solution {
 
   public static void main(String[] args) {
     grid = new Grid(dim, numDrivers, numPassengers, DriverType.HEATSEEKING);
-    generate_ACO_infile(numDrivers, numPassengers, grid);
-    runQueueAlgorithm();
+//    generate_ACO_infile(numDrivers, numPassengers, grid);
+//    runQueueAlgorithm();
+    runSwarmAlgorithm(numDrivers,numPassengers,grid);
   }
 
   public static void generate_ACO_infile(int numberOfDrivers, int numberOfPassengers, Grid grid)
@@ -67,6 +68,10 @@ class Solution {
         }
         // Always close files.
         bufferedWriter.close();
+
+        QAPTest test = new QAPTest();
+        test.run("in/"+fileName);
+
     }
     catch(IOException ex) {
         System.out.println(
@@ -399,8 +404,28 @@ class Solution {
     }
   }
 
-  public static void runSwarmAlgorithm(){
+  public static void runSwarmAlgorithm(int numberOfDrivers, int numberOfPassengers, Grid grid){
+    //==============SIMULATION==============================================
+    Deque<Passenger> queue = new LinkedList<Passenger>();
+    for (int i = 0; i < numPassengers; i++) {
+      queue.addFirst(grid.passengers[i]);
+    }
 
+    int nextPassengerSpawn = 5;
+    int totalNumTrips = 0;
+    int totalDistanceNoPassenger = 0;
+    int totalDistanceWithPassenger = 0;
+    int totalCombinedDistance = 0;
+    int passengerNum = 0;
+
+    //Main tick loop
+//    for (int i = 0; i < 30; i++) {
+      Grid.printGrid(grid);
+
+      updateSimulationModel();
+
+      generate_ACO_infile(numDrivers, numPassengers, grid);
+//    }
   }
 
   public static void runQueueAlgorithm(){

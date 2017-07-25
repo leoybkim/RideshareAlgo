@@ -37,4 +37,6 @@ public abstract class Problem {
 	public abstract void solve(ACO aco);
 
 	public abstract int[] getBestSolution();
+
+	public abstract double getAverageDistanceSolution();
 }
