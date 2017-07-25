@@ -7,9 +7,9 @@ import aco.AntSystem;
 
 public class QAPTest {
 
-	private static int ants = 10;
+	private static int ants = Constants.NUM_ANTS;
 
-	private static int interations = 10;
+	private static int interations = Constants.NUM_INTERATIONS;
 
 	public static void main(String[] args) {
 		Problem p = new QuadraticAssignmentProblem("in/test_8_10.qap");

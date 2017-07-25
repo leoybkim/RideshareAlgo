@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 import java.lang.*;
 
+
 //TODO: Add stats...
 // Track time it takes for average trip
 // Track time it takes for average pickup
@@ -11,9 +12,9 @@ import java.lang.*;
 class Solution {
   private static double lambda = 0.2;
   private static Random rng = new Random();
-  private static int dim = 10;
-  private static int numDrivers = 10;
-  private static int numPassengers = 10;
+  private static int dim = Constants.DIMENSION;
+  private static int numDrivers = Constants.NUM_DRIVERS;
+  private static int numPassengers = Constants.NUM_PASSENGERS;
   private static Grid grid;
 
   private static final int TABU_TENURE = 3;
