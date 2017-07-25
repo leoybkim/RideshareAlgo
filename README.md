@@ -1,9 +1,24 @@
 # RideshareAlgo
 
+There are two files, compiling Solution_BFS_Tabu.java will allow you to run the Greedy BFS and Tabu Search. Compiling Rideshare.java allows you to run the ACO.
 
-### Tabu Search
+### Tabu Search and Greedy BFS
 
-todo
+```
+~$ javac Solution_BFS_Tabu.java
+~$ java Solution_BFS_Tabu 
+```
+
+Modifying this line will change the output. (Line 37)
+```
+~Tuple t = runQueueAlgorithm(10, 10, 10, DriverType.STATIONARY);
+```
+
+The parameters for this are, 
+```
+~runQueueAlgorithm(int numDrivers, int numPassengers, int dim, DriverType behaviour)
+~runTabuSimulation(int numDrivers, int numPassengers, int dim, DriverType behaviour)
+```
 
 ### ACO
 
