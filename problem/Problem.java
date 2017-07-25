@@ -36,5 +36,5 @@ public abstract class Problem {
 
 	public abstract void solve(ACO aco);
 
-	public abstract String getBestSolution();
+	public abstract int[] getBestSolution();
 }

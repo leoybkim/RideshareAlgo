@@ -80,20 +80,10 @@ public abstract class ACO implements Observer{
 		this.p = problem;
 		this.numberOfAnts = numberOfAnts;		
 		this.interations = interations;
-		this.bestAnt = new TreeSet<Ant>(new Comparator<Ant>() {
-			@Override
-			public int compare(Ant o1, Ant o2) {
-				// Define comparing logic here
-				if(o1.tourLength<o2.tourLength)
-					return -1;
-				else if(o2.tourLength<o1.tourLength)
-					return 1;
-				return 0;
-			}
-		});
 	}
 
 	public Set<Ant> solve(int[] passengerDrivers) {
+		reset();
 		this.driverDistances = passengerDrivers;
 		initializeData();
 		while (!terminationCondition()) {
@@ -101,6 +91,27 @@ public abstract class ACO implements Observer{
 			updatePheromones();
 		}
 		return bestAnt;
+	}
+
+	public void reset(){
+		this.bestAnt = new TreeSet<Ant>(new Comparator<Ant>() {
+			@Override
+			public int compare(Ant o1, Ant o2) {
+				// Define comparing logic here
+				if (o1.currentNode == o2.currentNode) {
+					return 0;
+				} else {
+					if (o1.tourLength < o2.tourLength)
+						return -1;
+					else if (o2.tourLength < o1.tourLength)
+						return 1;
+					else
+						return -1;
+				}
+			}
+		});
+		this.it = 0;
+		this.finishedAnts = 0;
 	}
 
 	public double getDeltaTau(int i) {
@@ -151,13 +162,15 @@ public abstract class ACO implements Observer{
 	public synchronized void update(Observable observable, Object obj) {
 		Ant ant = (Ant) obj;
 
-		ant.tourLength = evaluate(ant.currentNode);
+		ant.tourLength = driverDistances[ant.currentNode];
+
+//		System.out.println("Ant #"+ant.id + " says that the currentNode is "+ant.currentNode +" and the tourlength at is " +ant.tourLength);
 
 //		if (better(ant, bestAnt)) {
-//			bestAnt = ant.clone();
+//			bestAnt.add(ant.clone());
 //		}
 
-		bestAnt.add(ant);
+		bestAnt.add(ant.clone());
 
 		if (++finishedAnts == numberOfAnts) {
 			// Continue all execution
@@ -166,12 +179,8 @@ public abstract class ACO implements Observer{
 		}
 	}
 
-//	public boolean better(Ant ant, Ant bestAnt) {
-//		return bestAnt == null || ant.tourLength < bestAnt.tourLength;
-//	}
-
-	public int evaluate(int currentNode) {
-		return driverDistances[currentNode];
+	public boolean better(Ant ant, Ant bestAnt) {
+		return bestAnt == null || ant.tourLength < bestAnt.tourLength;
 	}
 
 	public double[] getTau() {

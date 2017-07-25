@@ -86,7 +86,7 @@ public class InstanceReader {
 	}
 	
 	public double[][] readDoubleMatrix(int i, int j) {
-		return readDoubleMatrix(i, j, ",");
+		return readDoubleMatrix(i, j, " ");
 	}
 
 	public double[][] readDoubleMatrix(int i, int j, String separator) {
@@ -113,11 +113,11 @@ public class InstanceReader {
 	}
 
 	public int[] readIntVector(int size, String separator) {
-		return readIntVector(",");
+		return readIntVector(" ");
 	}
 	
 	public int[][] readIntMatrix(int i, int j) {
-		return readIntMatrix(i, j, ",");
+		return readIntMatrix(i, j, " ");
 	}
 
 	public int[][] readIntMatrix(int i, int j, String separator) {

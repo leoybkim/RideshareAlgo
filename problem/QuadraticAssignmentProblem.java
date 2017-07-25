@@ -7,12 +7,13 @@ import java.util.*;
 public class QuadraticAssignmentProblem extends Problem{
 
 	public static final int Q = 1;
-	public ACO aco;
 
 	protected int[][] mapping;
 
 	protected int numberOfPassengers;
 	protected int numberOfDrivers;
+
+	protected int[] bestForPassenger;
 
 	public QuadraticAssignmentProblem(String filename) {
 		super(filename);
@@ -21,7 +22,7 @@ public class QuadraticAssignmentProblem extends Problem{
 
 		this.numberOfPassengers = reader.readInt();
 		this.numberOfDrivers = reader.readInt();
-		this.mapping = reader.readIntMatrix(numberOfPassengers, numberOfDrivers, ",");
+		this.mapping = reader.readIntMatrix(numberOfPassengers, numberOfDrivers, " ");
 
 		reader.close();
 	}
@@ -39,23 +40,27 @@ public class QuadraticAssignmentProblem extends Problem{
 
 	@Override
 	public void solve(ACO aco) {
-        List<Integer> pairings = new ArrayList<Integer>();
+		bestForPassenger = new int[numberOfPassengers];
+		int [] taken = new int[numberOfDrivers];
 		for (int i = 0; i < numberOfPassengers; i++) {
-			// TODO pass in the single row array with the passenger's distance to each driver
-            // returns an array ordered by the best driver for this passenger
             int [] passengersDrivers = mapping[i];
-            System.out.println("Passenger " +i);
             Set<Ant> bestAnt = aco.solve(passengersDrivers);
             Iterator iter = bestAnt.iterator();
-            while (iter.hasNext()) {
-                System.out.println(iter.next());
-            }
+			while (iter.hasNext()) {
+				Ant o = (Ant) iter.next();
+				if (taken[o.currentNode] > 0) {
+					continue;
+				}else{
+					bestForPassenger[i] = o.currentNode;
+					taken[o.currentNode] = 1;
+					break;
+				}
+			}
 		}
-		// TODO deal with any tiebreakers
 	}
 
 	@Override
-    public String getBestSolution() {
-	    return "";
+    public int[] getBestSolution() {
+		return bestForPassenger;
     }
 }

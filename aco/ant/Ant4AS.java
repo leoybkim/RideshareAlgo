@@ -19,6 +19,8 @@ package aco.ant;
 import util.RouletteWheel;
 import aco.ACO;
 
+import java.util.ArrayList;
+
 /**
  * The AS Ant Class
  * 
@@ -34,13 +36,9 @@ public class Ant4AS extends Ant {
 
 	@Override
 	public void explore() {
-        int nextNode = doExploration();
-
-        //Save next node
-        tour.add(new Integer(nextNode));
-        path[nextNode] = 1;
-
-        currentNode = nextNode;
+		currentNode = doExploration();
+		path[currentNode] = 1;
+//		System.out.println("Ant #"+this.id + " says that the currentNode is "+currentNode +" and the path at is " +path[currentNode]);
 	}
 
 	/**
@@ -57,9 +55,10 @@ public class Ant4AS extends Ant {
 			if (aco.getTau(i) == 0.0) {
 				throw new RuntimeException("tau == 0.0");
 			}
+			double inverseDriver = 1/(double) (aco.getDriverDistances(i));
 
 			double tij = Math.pow(aco.getTau(i), ALPHA);
-			double nij = Math.pow(aco.getDriverDistances(i), BETA);
+			double nij = Math.pow(inverseDriver, BETA);
 			sum += tij * nij;
 		}
 		
@@ -71,8 +70,9 @@ public class Ant4AS extends Ant {
 		double sumProbability = 0.0;
 		
 		for (int j = 0; j < aco.p.getNodesDriver(); j++) {
+			double inverseDriver = 1/(double) (aco.getDriverDistances(j));
 			double tij = Math.pow(aco.getTau(j), ALPHA);
-			double nij = Math.pow(aco.getDriverDistances(j), BETA);
+			double nij = Math.pow(inverseDriver, BETA);
 			probability[j] = (tij * nij) / sum;
 			sumProbability += probability[j];
 		}
@@ -86,15 +86,15 @@ public class Ant4AS extends Ant {
 		
 		return nextNode;
 	}
-//
-//	@Override
-//	public Ant clone() {
-//		Ant ant = new Ant4AS(aco);
-//		ant.id = id;
-//		ant.currentNode = currentNode;
-//		ant.tourLength = tourLength;
-//		ant.tour = new ArrayList<Integer>(tour);
-//		ant.path = path.clone();
-//		return ant;
-//	}
+
+	@Override
+	public Ant clone() {
+		Ant ant = new Ant4AS(aco);
+		ant.id = id;
+		ant.currentNode = currentNode;
+		ant.tourLength = tourLength;
+		ant.tour = new ArrayList<Integer>(tour);
+		ant.path = path.clone();
+		return ant;
+	}
 }

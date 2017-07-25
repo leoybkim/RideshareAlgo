@@ -71,19 +71,15 @@ public abstract class Ant extends Observable implements Runnable {
 
 	@Override
 	public void run() {
-		init();
+		reset();
 		explore();
 		setChanged();
 		notifyObservers(this);
 	}
 
-	public void init(){
-		reset();
-	}
-
 	@Override
 	public String toString() {
-		return "Ant id: " + id + " solution is driver # " + tour+" with a distance of "+tourLength;
+		return "Ant id: " + id + " solution is driver # " + currentNode+" with a distance of "+tourLength;
 	}
 
 	/**
@@ -94,5 +90,5 @@ public abstract class Ant extends Observable implements Runnable {
 	/**
 	 * Clone the ant
 	 */
-//	public abstract Ant clone();
+	public abstract Ant clone();
 }
