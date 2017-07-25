@@ -50,8 +50,10 @@ public class ExecutionStats {
 	public void printStats(){
 		System.out.println("Execution time (ms): "+executionTime);
 		int[] best = p.getBestSolution();
+		double average = p.getAverageDistanceSolution();
 		for(int i = 0; i < p.getNodesPassenger(); i++){
 			System.out.println("Match passenger "+i +" with driver " +best[i]);
 		}
+		System.out.println("The average distance is " +average);
 	}
 }

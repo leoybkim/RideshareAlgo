@@ -15,6 +15,8 @@ public class QuadraticAssignmentProblem extends Problem{
 
 	protected int[] bestForPassenger;
 
+	protected int averageDistance;
+
 	public QuadraticAssignmentProblem(String filename) {
 		super(filename);
 
@@ -52,6 +54,8 @@ public class QuadraticAssignmentProblem extends Problem{
 					continue;
 				}else{
 					bestForPassenger[i] = o.currentNode;
+					System.out.println("The passenger " +o.tourLength);
+					averageDistance += o.tourLength;
 					taken[o.currentNode] = 1;
 					break;
 				}
@@ -63,4 +67,9 @@ public class QuadraticAssignmentProblem extends Problem{
     public int[] getBestSolution() {
 		return bestForPassenger;
     }
+
+    @Override
+	public double getAverageDistanceSolution() {
+		return averageDistance/numberOfPassengers;
+	}
 }

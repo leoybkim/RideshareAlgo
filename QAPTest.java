@@ -18,4 +18,13 @@ public class QAPTest {
 		ExecutionStats es = ExecutionStats.execute(aco, p);
 		es.printStats();
 	}
+
+	public void run(String filename) {
+		Problem p = new QuadraticAssignmentProblem(filename);
+
+		ACO aco = new AntSystem(p, ants, interations);
+
+		ExecutionStats es = ExecutionStats.execute(aco, p);
+		es.printStats();
+	}
 }
