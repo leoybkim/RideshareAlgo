@@ -12,7 +12,7 @@ public class QAPTest {
 	private static int interations = 10;
 
 	public static void main(String[] args) {
-		Problem p = new QuadraticAssignmentProblem("in/test_10_10.qap");
+		Problem p = new QuadraticAssignmentProblem("in/test_8_10.qap");
 		ACO aco = new AntSystem(p, ants, interations);
 
 		ExecutionStats es = ExecutionStats.execute(aco, p);

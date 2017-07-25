@@ -44,7 +44,6 @@ public class QuadraticAssignmentProblem extends Problem{
 		int [] taken = new int[numberOfDrivers];
 		for (int i = 0; i < numberOfPassengers; i++) {
             int [] passengersDrivers = mapping[i];
-            System.out.println("Passenger " +i);
             Set<Ant> bestAnt = aco.solve(passengersDrivers);
             Iterator iter = bestAnt.iterator();
 			while (iter.hasNext()) {

@@ -48,9 +48,7 @@ public class ExecutionStats {
 	}
 
 	public void printStats(){
-		System.out.println("ACO Finished Algorithm");
 		System.out.println("Execution time (ms): "+executionTime);
-		System.out.println("Best Solution Found: ");
 		int[] best = p.getBestSolution();
 		for(int i = 0; i < p.getNodesPassenger(); i++){
 			System.out.println("Match passenger "+i +" with driver " +best[i]);
