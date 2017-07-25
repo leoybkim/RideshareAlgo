@@ -29,7 +29,7 @@ public class Settings {
 	public static int ALPHA = 1;
 	
 	/** Importance of heuristic evaluate */
-	public static int BETA = 1;
+	public static int BETA = 2;
 	
 	/** Global Update Rule */
 	public static double RHO = 0.1;
