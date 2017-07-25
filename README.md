@@ -2,7 +2,7 @@
 
 There are two files, compiling Solution_BFS_Tabu.java will allow you to run the Greedy BFS and Tabu Search. Compiling Rideshare.java allows you to run the ACO.
 
-### Tabu Search and Greedy BFS
+### Greedy BFS (Queue) and Tabu Search  
 
 ```
 ~$ javac Solution_BFS_Tabu.java
