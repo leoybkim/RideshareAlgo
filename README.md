@@ -16,5 +16,5 @@ The grid size, number of drivers and passengers, ants and iterations can be modi
 
 
 
-Referenece:
+Reference:
 https://github.com/thiagodnf/aco-framework
