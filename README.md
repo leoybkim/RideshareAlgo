@@ -11,13 +11,13 @@ There are two files, compiling Solution_BFS_Tabu.java will allow you to run the 
 
 Modifying this line will change the output. (Line 37)
 ```
-~Tuple t = runQueueAlgorithm(10, 10, 10, DriverType.STATIONARY);
+Tuple t = runQueueAlgorithm(10, 10, 10, DriverType.STATIONARY);
 ```
 
 The parameters for this are, 
 ```
-~runQueueAlgorithm(int numDrivers, int numPassengers, int dim, DriverType behaviour)
-~runTabuSimulation(int numDrivers, int numPassengers, int dim, DriverType behaviour)
+runQueueAlgorithm(int numDrivers, int numPassengers, int dim, DriverType behaviour)
+runTabuSimulation(int numDrivers, int numPassengers, int dim, DriverType behaviour)
 ```
 
 ### ACO
